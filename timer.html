@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+     <meta charset="utf-8"/>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&display=swap');
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+
+div.flex-container {
+    background-image: url("bg.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    height: 100%;
+    width: 100%;
+    /*padding-bottom: 5rem;*/
+}
+
+div#timer {
+    margin:auto;
+    width: 100%;
+    height: 75%;
+    font-family: "IM Fell English SC";
+    font-size: 30rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+div.button{
+    background-image: url(button.png);
+    background-repeat: no-repeat;
+    max-height: 100%;
+    max-width: 100%;
+    display: inline-block;
+    padding:  5rem;
+
+}
+
+div.d-flex-row {
+
+    justify-content: space-around;
+    display: flex;
+    /*padding-bottom: 2rem;*/
+}
+    </style>
+    </head>
+
+    <body>
+    <div class="flex-container">
+
+    <div class="flex-lg-row"id="timer" onclick="start_timer()">00:00</div>
+
+    <div class="d-flex-row">
+
+    <div class="button" id="button1" onclick="button(this.id)"></div>
+    <div class="button" id="button2" onclick="button(this.id)"></div>
+    <div class="button" id="button3" onclick="button(this.id)"></div>
+
+    </div>
+
+
+    </div>
+    </body>
+
+    <script>
+        var start = 0
+        var diff = 0
+        var timer_count = 0
+        var pause = false
+
+        // Need to pause time on click
+
+        function start_timer() {
+            if (start != 0 && pause !== true) {
+                pause = true;
+                timer_count = timer_count + diff
+                diff = 0
+            }
+            else if (timer_count == 0) {
+                start = Math.floor(Date.now() / 1000);
+            }
+            else {
+                start = Math.floor(Date.now() / 1000);
+                pause = false;
+            }
+            timer_tick()
+        }
+
+        function timer_tick() {
+            if (pause !== true) {
+                var now = Math.floor(Date.now() / 1000);
+                diff = now - start;
+            }
+            display = timer_count + diff
+
+            var m = Math.floor(display / 60);
+            var s = Math.floor(display % 60);
+            m = pad(m);
+            s = pad(s);
+            document.getElementById("timer").innerHTML = m + ":" + s;
+            var t = setTimeout(timer_tick, 1000);
+        }
+
+        function pad(number){
+            if (number < 10) {number = "0" + number};
+            return number;
+        }
+
+        function button(button_id){
+            if (pause === true ) {
+                timer_count += 60;
+            }
+            else {
+                start -= 60;
+            }
+            document.getElementById(button_id).style.visibility = "hidden";
+        }
+    </script>
+
+</html>
